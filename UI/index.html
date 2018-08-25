@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>STG Hackathon</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	
+	<script src="vendor/jquery/jquery.min.js"></script>
+
+	<script>
+	$(document).ready(function(){
+
+    $('#items').change(function(e){
+       // Your event handler
+	   console.log("change")
+	   console.log(e.target.selectedIndex)
+	   
+	   $.ajax({
+			url:"http://localhost:5000/stg/items/"+e.target.selectedIndex,
+			cache:false,
+			type: "GET",
+			<!-- data:{id : e.target.selectedIndex}, -->
+			success: function(html){
+				console.log("suceess hitting")
+				console.log(html.item.address)
+				image_source_1 = html.item.address_1
+				image_source_2 = html.item.address_2
+				$("#div1").html('<img src="'+ image_source_1 +'" alt="Image 1" Height="250" Width="250">')
+				$("#div2").html('<img src="'+ image_source_2 +'" alt="Image 2" Height="250" Width="250">')
+			},
+			error: function(error)
+			{
+			console.log(error)
+			}
+	   });
+	   
+    });
+
+    // And now fire change event when the DOM is ready
+    $('#countrylist').trigger('change');
+	});
+	</script>
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">STG Hackathon</a>
+		
+		
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h1 class="mt-5">STG Hackathon, 2018: Use Case 1</h1>
+          <p class="lead"><b>Team Rabbit</b></p>
+          <!-- <ul class="list-unstyled"> -->
+            <!-- <li>Bootstrap 4.1.3</li> -->
+            <!-- <li>jQuery 3.3.1</li> -->
+          <!-- </ul> -->
+        </div>
+      </div>
+
+	  <div class="row">
+        <div class="col-lg-12 text-center">
+			<div class="dropdown">
+				<select id="items" >
+					<option class="dropdown-item" value="select" selected="selected">--Select an Item--</option>
+					<option value="item1">Item1</option>
+					<option value="item2" >Item2</option>
+					<option value="item3">Item3</option>
+			  </select>
+			</div>
+		</div>
+	</div>
+	<br>
+	<br>
+	<br>
+	  <div class="row">
+        <div class="col-lg-12 text-center">
+		<div class="row">
+			<div class="col-lg-6" id="div1">
+			</div>
+			<div class="col-lg-6" id="div2">
+			</div>
+			</div>
+		</div>
+	</div>
+
+
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
+</html>
