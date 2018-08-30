@@ -1,0 +1,93 @@
+
+# coding: utf-8
+
+# In[3]:
+
+
+import cv2
+import matplotlib.pyplot as plt
+
+
+# In[74]:
+
+
+def calculate_points(image, one_line):
+
+    x, y, w, h = one_line.split(' ')[1:]
+    width = image.shape[1]
+    height = image.shape[0]
+
+
+    x = float(x) * width
+    y = float(y) * height
+    w = float(w) * width
+    h = float(h) * height
+
+    #print(x,y,w,h)
+
+    x_max  = (x * 2 + w) / 2.0
+    #print(x_max)
+    y_max = (y * 2 + h)/2.0
+    #print(y_max)
+
+    x_min = x_max - w
+    #print(x_min)
+
+    y_min = y_max - h
+    #print(y_min)
+
+    return int(one_line[0]) , int(x_min), int(y_min), int(x_max), int(y_max)
+
+#image_cropped = image[int(y_min):int(y_max),int(x_min):int(x_max)]
+#plt.imshow(image_cropped)
+'''
+x = (x_min + x_max / 2) / width
+y = (y_min + y_max / 2) / height
+w = (x_max - x_min) / width
+h = (y_max- y_min) / height
+'''
+
+
+# In[75]:
+
+
+def write_images(image,collected_points):
+    for index, item in enumerate(collected_points):
+            image_name = 'test'
+            class_id =  item[0]
+            directory = 'snippets/'
+            #print(item)
+            filename = directory + image_name +'_'+ str(class_id) +'_'+ str(index) + '.jpg'
+            local_image = cv2.cvtColor(image[item[2]:item[4], item[1]:item[3]] , cv2.COLOR_BGR2RGB)
+            local_image = cv2.resize(local_image, (128, 128)) 
+            cv2.imwrite(filename, local_image)
+
+
+# In[80]:
+
+
+def read_file(filename, text_filename):
+    image = cv2.imread(filename)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    f = open(text_filename)
+    one_line = f.read().split('\n')
+    #print(len(one_line))
+    collected_points = []
+    for i in range(len(one_line)-1):
+        returned_points = calculate_points(image, one_line[i])
+        collected_points.append(returned_points)
+    write_images(image,collected_points)
+    f.close()
+
+
+# In[81]:
+
+
+import glob
+
+images = glob.glob('./dataset/*.jpg')
+text_image = glob.glob('./dataset/*.txt')
+
+for i in zip(images, text_image):
+    read_file(i[0], i[1])
+
