@@ -1,0 +1,8 @@
+classes= 4
+train  = train.txt
+#valid  = coco_testdev
+valid = test.txt
+names = data/make.names
+backup = backup
+
+
